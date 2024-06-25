@@ -1,6 +1,6 @@
 ---
 permalink: /
-title: "Peronal Pages for Haoxin Yang (杨灏鑫)"
+title: "杨灏鑫(Haoxin Yang, Harxis Yang)"
 author_profile: true
 redirect_from: 
   - /about/
