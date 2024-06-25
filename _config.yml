@@ -21,7 +21,7 @@ repository               : "Harxis/Harxis.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "Harxis.png"
+  avatar           : "Harxis.jpg"
   name             : "杨灏鑫(Haoxin Yang)"
   pronouns         : # example: "she/her"  
   bio              : "Ph.D student at SCUT."
@@ -48,7 +48,7 @@ author:
   stackoverflow    : # User number or user number and name (i.e., use "1" or "1/jeff-atwood")    
 
   # Social media
-  bluesky          : "bsky.app" # Replace this with you Bluesky username
+  bluesky          : # "bsky.app" # Replace this with you Bluesky username
   facebook         : # Username
   flickr           : # Username
   foursquare       : # Username
