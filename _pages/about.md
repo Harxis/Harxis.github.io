@@ -13,6 +13,7 @@ My research interests include privacy and security in computer vision and AIGC.
 
 # 🔥 New
 <span class='anchor' id='-news'></span>
+* 2024-08: A paper was accepted by IEEE Transactions on Information Forensics and Security (TIFS).
 * 2024-05: A paper was accepted by Information Fusion.
 * 2022-03: A paper was accepted by ICME 2022.
 
@@ -21,13 +22,15 @@ My research interests include privacy and security in computer vision and AIGC.
 # 📝 Publications
 <span class='anchor' id='-publications'></span>
  *: Equal contribution
+ * [G<sup>2</sup>Face: High-Fidelity Reversible Face Anonymization via Generative and Geometric Priors](xxx). IEEE Transactions on Information Forensics and Security (SCI 一区, 信息安全TOP Trans). **Haoxin Yang**, Xuemiao Xu, Cheng Xu, Huaidong Zhang, Jing Qin, Yi Wang, Pheng-Ann Heng, Shengfeng He.
 * [Hierarchical damage correlations for old photo restoration](https://www.sciencedirect.com/science/article/pii/S1566253524001180). Information Fusion(SCI 一区). Weiwei Cai, Xuemiao Xu, Jiajia Xu, Huaidong Zhang, **Haoxin Yang**, Kun Zhang, Shengfeng He.
 * [Individual property inference over collaborative learning in deep feature space](https://ieeexplore.ieee.org/document/9859857). ICME2022(CCF-B). **Haoxin Yang**; Yi Wang; Bin Li.
 
 
 # 🧾 Patents
+* 一种动态视觉智能售货柜商品检测追踪与后处理方法. CN118298356A. 徐雪妙;**杨灏鑫**;黄少遇;吴惊声;魏钦煜.
 * 一种基于深度特征与梯度信息的数据重建方法及系统(已授权). CN202111524383.9. **杨灏鑫**; 李斌; 王艺.
-* 协同训练数据属性的推断方法、装置、设备及存储介质. CN114287009A. 王艺; **杨灏鑫**; 李斌.
+* 协同训练数据属性的推断方法、装置、设备及存储介质. CN114287009A(已授权). 王艺; **杨灏鑫**; 李斌.
 
 
 
