@@ -13,6 +13,7 @@ My research interests include privacy and security in computer vision and AIGC.
 
 # 🔥 New
 <span class='anchor' id='-news'></span>
+* 2025-03: A paper was accepted by IEEE Transactions on Information Forensics and Security (TIFS).
 * 2025-03: A paper was accepted by IEEE International Conference on Multimedia& Expo (ICME) 2025.
 * 2024-08: A paper was accepted by IEEE Transactions on Information Forensics and Security (TIFS).
 * 2024-05: A paper was accepted by Information Fusion.
@@ -23,6 +24,7 @@ My research interests include privacy and security in computer vision and AIGC.
 # 📝 Publications
 <span class='anchor' id='-publications'></span>
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*: Equal contribution &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #: Corresponding Authors
+* [SITA: Structurally Imperceptible and Transferable Adversarial Attacks for Stylized Image Generation](https://xxx). IEEE Transactions on Information Forensics and Security (SCI 一区, 信息安全TOP Trans). Jingdan Kang, **Haoxin Yang***, Yan Cai, Huaidong Zhang, Xuemiao Xu, Yong Du, Shengfeng He.
 * [SCJD: Sparse Correlation and Joint Distillation for Efficient 3D Human Pose Estimation](https://arxiv.org/abs/2503.14097). IEEE International Conference on Multimedia& Expo, ICME 2025 (CCF-B 会议). Weihong Chen, Xuemiao Xu, **Haoxin Yang**#, Yi Xie, Peng Xiao, Cheng Xu, Huaidong Zhang, Pheng-Ann Heng.
 * [G<sup>2</sup>Face: High-Fidelity Reversible Face Anonymization via Generative and Geometric Priors](https://arxiv.org/abs/2408.09458). IEEE Transactions on Information Forensics and Security (SCI 一区, 信息安全TOP Trans). **Haoxin Yang**, Xuemiao Xu, Cheng Xu, Huaidong Zhang, Jing Qin, Yi Wang, Pheng-Ann Heng, Shengfeng He.
 * [Hierarchical damage correlations for old photo restoration](https://www.sciencedirect.com/science/article/pii/S1566253524001180). Information Fusion(SCI 一区). Weiwei Cai, Xuemiao Xu, Jiajia Xu, Huaidong Zhang, **Haoxin Yang**, Kun Zhang, Shengfeng He.
