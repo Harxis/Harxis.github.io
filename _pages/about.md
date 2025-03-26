@@ -24,7 +24,7 @@ My research interests include privacy and security in computer vision and AIGC.
 # 📝 Publications
 <span class='anchor' id='-publications'></span>
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*: Equal contribution &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #: Corresponding Authors
-* [SITA: Structurally Imperceptible and Transferable Adversarial Attacks for Stylized Image Generation](https://xxx). IEEE Transactions on Information Forensics and Security (SCI 一区, 信息安全TOP Trans). Jingdan Kang, **Haoxin Yang***, Yan Cai, Huaidong Zhang, Xuemiao Xu, Yong Du, Shengfeng He.
+* [SITA: Structurally Imperceptible and Transferable Adversarial Attacks for Stylized Image Generation](https://arxiv.org/abs/2503.19791). IEEE Transactions on Information Forensics and Security (SCI 一区, 信息安全TOP Trans). Jingdan Kang, **Haoxin Yang***, Yan Cai, Huaidong Zhang, Xuemiao Xu, Yong Du, Shengfeng He.
 * [SCJD: Sparse Correlation and Joint Distillation for Efficient 3D Human Pose Estimation](https://arxiv.org/abs/2503.14097). IEEE International Conference on Multimedia& Expo, ICME 2025 (CCF-B 会议). Weihong Chen, Xuemiao Xu, **Haoxin Yang**#, Yi Xie, Peng Xiao, Cheng Xu, Huaidong Zhang, Pheng-Ann Heng.
 * [G<sup>2</sup>Face: High-Fidelity Reversible Face Anonymization via Generative and Geometric Priors](https://arxiv.org/abs/2408.09458). IEEE Transactions on Information Forensics and Security (SCI 一区, 信息安全TOP Trans). **Haoxin Yang**, Xuemiao Xu, Cheng Xu, Huaidong Zhang, Jing Qin, Yi Wang, Pheng-Ann Heng, Shengfeng He.
 * [Hierarchical damage correlations for old photo restoration](https://www.sciencedirect.com/science/article/pii/S1566253524001180). Information Fusion(SCI 一区). Weiwei Cai, Xuemiao Xu, Jiajia Xu, Huaidong Zhang, **Haoxin Yang**, Kun Zhang, Shengfeng He.
@@ -43,12 +43,12 @@ My research interests include privacy and security in computer vision and AIGC.
 * 2022.09 - Now 
 &emsp; Ph.D Student
 &emsp; School of Computer Science & Engineering, South China University of Technology
-&emsp; Supervisor Prof. [Xuemiao Xu](https://www2.scut.edu.cn/cs/2017/0629/c22284a328094/page.htm)
+&emsp; Supervisor Prof. [Xuemiao Xu](https://scholar.google.com/citations?user=lFtJq3MAAAAJ&hl=zh-CN&oi=ao).
 
 * 2019.09 - 2022.06 
 &emsp; Master
 &emsp; College of Electronics and Information Engineering, Shenzhen University
-&emsp; Supervisors Prof. [Yi Wang](https://scholar.google.com/citations?user=hYVi3vIAAAAJ&hl=zh-CN&oi=ao) & Prof. [Bin Li](https://scholar.google.com/citations?user=hYVi3vIAAAAJ&hl=zh-CN&oi=ao)
+&emsp; Supervisors Prof. [Bin Li](https://scholar.google.com/citations?user=g0iR9IkAAAAJ&hl=zh-CN&oi=ao) & Prof. [Yi Wang](https://scholar.google.com/citations?user=hYVi3vIAAAAJ&hl=zh-CN&oi=ao).
 
 * 2015.09 - 2019.06 
 &emsp; Undergraduate
