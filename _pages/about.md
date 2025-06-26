@@ -13,11 +13,11 @@ My research interests include privacy and security in computer vision and AIGC.
 
 # 🔥 New
 <span class='anchor' id='-news'></span>
+* 2025-06: A paper was accepted by International Conference on Computer Vision, ICCV 2025.
 * 2025-03: A paper was accepted by IEEE Transactions on Information Forensics and Security (TIFS).
 * 2025-03: A paper was accepted by IEEE International Conference on Multimedia& Expo (ICME) 2025.
 * 2024-08: A paper was accepted by IEEE Transactions on Information Forensics and Security (TIFS).
 * 2024-05: A paper was accepted by Information Fusion.
-* 2022-03: A paper was accepted by ICME 2022.
 
 
 
