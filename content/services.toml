@@ -2,8 +2,26 @@ type = "card"
 title = "Services"
 description = "Professional services and community involvement."
 
-[[items]]
-title = "Reviewer"
-subtitle = "Journal Name"
-date = "2024"
-content = "Reviewed papers for..."
+[[items]] 
+title = "Reviewer" 
+subtitle = "TIFS" 
+date = "2025" 
+content = "Participated in reviewing papers."
+
+[[items]] 
+title = "Reviewer" 
+subtitle = "TCSVT" 
+date = "2025" 
+content = "Participated in reviewing papers."
+
+[[items]] 
+title = "Reviewer" 
+subtitle = "TAI" 
+date = "2025" 
+content = "Participated in reviewing papers."
+
+[[items]] 
+title = "Reviewer" 
+subtitle = "ICME" 
+date = "2025" 
+content = "Participated in reviewing papers."

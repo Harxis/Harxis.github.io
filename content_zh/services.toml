@@ -4,6 +4,24 @@ description = "专业服务与社区参与。"
 
 [[items]]
 title = "审稿人"
-subtitle = "某期刊"
-date = "2024"
+subtitle = "TIFS期刊"
+date = "2025"
+content = "参与审阅论文。"
+
+[[items]]
+title = "审稿人"
+subtitle = "TCSVT期刊"
+date = "2025"
+content = "参与审阅论文。"
+
+[[items]]
+title = "审稿人"
+subtitle = "TAI期刊"
+date = "2025"
+content = "参与审阅论文。"
+
+[[items]]
+title = "审稿人"
+subtitle = "ICME会议"
+date = "2025"
 content = "参与审阅论文。"

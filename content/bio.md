@@ -1,5 +1,5 @@
-I am a PhD student at the School of Science, University of Example, advised by [Prof. Advisor One](https://example.com) and [Dr. Advisor Two](https://example.com).
+I am currently a PhD student in the School of Computer Science and Engineering at South China University of Technology, under the supervision of Professor [Xuemiao Xu](https://scholar.google.com/citations?user=lFtJq3MAAAAJ&hl) and Professor [Shengfeng He](https://scholar.google.com/citations?user=rBWnK8wAAAAJ&hl).
 
-Prior to this, I obtained a BSc degree with First Class Honours in Natural Science from the University of Example.
+Previously, I received a Bachelor of Science degree in Electronic Information Science and Technology from South China Agricultural University and a Master of Engineering degree in Electronic and Communication Engineering from Shenzhen University, under the supervision of Professor [Bin Li](https://scholar.google.com/citations?user=g0iR9IkAAAAJ&hl) and Professor [Yi Wang](https://scholar.google.com/citations?user=hYVi3vIAAAAJ&hl).
 
-My current research focuses on investigating the mathematical principles of natural philosophy.
+My research focuses primarily on privacy and security issues in computer vision.
