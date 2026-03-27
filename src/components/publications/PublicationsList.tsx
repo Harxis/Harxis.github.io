@@ -9,7 +9,8 @@ import {
     CalendarIcon,
     BookOpenIcon,
     ClipboardDocumentIcon,
-    DocumentTextIcon
+    DocumentTextIcon,
+    TagIcon 
 } from '@heroicons/react/24/outline';
 import { Publication } from '@/types/publication';
 import { PublicationPageConfig } from '@/types/page';
@@ -22,16 +23,22 @@ interface PublicationsListProps {
     embedded?: boolean;
 }
 
+const parseTags = (tags: string[] | string | undefined): string[] => {
+    if (!tags) return [];
+    if (Array.isArray(tags)) return tags;
+    return tags.split(';').map(t => t.trim()).filter(Boolean);
+};
+
 export default function PublicationsList({ config, publications, embedded = false }: PublicationsListProps) {
     const messages = useMessages();
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedYear, setSelectedYear] = useState<number | 'all'>('all');
     const [selectedType, setSelectedType] = useState<string | 'all'>('all');
+    const [selectedTag, setSelectedTag] = useState<string | 'all'>('all');
     const [showFilters, setShowFilters] = useState(false);
     const [expandedBibtexId, setExpandedBibtexId] = useState<string | null>(null);
     const [expandedAbstractId, setExpandedAbstractId] = useState<string | null>(null);
 
-    // Extract unique years and types for filters
     const years = useMemo(() => {
         const uniqueYears = Array.from(new Set(publications.map(p => p.year)));
         return uniqueYears.sort((a, b) => b - a);
@@ -42,7 +49,21 @@ export default function PublicationsList({ config, publications, embedded = fals
         return uniqueTypes.sort();
     }, [publications]);
 
-    // Filter publications
+    // --- 功能 1：统计每个 Tag 包含的论文数量 ---
+    const allTagsWithCount = useMemo(() => {
+        const tagCounts: Record<string, number> = {};
+        publications.forEach(p => {
+            const parsed = parseTags(p.tags as string[]);
+            parsed.forEach(tag => {
+                tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+            });
+        });
+        
+        return Object.entries(tagCounts)
+            .map(([name, count]) => ({ name, count }))
+            .sort((a, b) => a.name.localeCompare(b.name));
+    }, [publications]);
+
     const filteredPublications = useMemo(() => {
         return publications.filter(pub => {
             const matchesSearch =
@@ -53,10 +74,13 @@ export default function PublicationsList({ config, publications, embedded = fals
 
             const matchesYear = selectedYear === 'all' || pub.year === selectedYear;
             const matchesType = selectedType === 'all' || pub.type === selectedType;
+            
+            const pubTags = parseTags(pub.tags as string[]);
+            const matchesTag = selectedTag === 'all' || pubTags.includes(selectedTag);
 
-            return matchesSearch && matchesYear && matchesType;
+            return matchesSearch && matchesYear && matchesType && matchesTag;
         });
-    }, [publications, searchQuery, selectedYear, selectedType]);
+    }, [publications, searchQuery, selectedYear, selectedType, selectedTag]);
 
     return (
         <motion.div
@@ -66,22 +90,30 @@ export default function PublicationsList({ config, publications, embedded = fals
         >
             <div className="mb-8">
                 <h1 className={`${embedded ? "text-2xl" : "text-4xl"} font-serif font-bold text-primary mb-4`}>{config.title}</h1>
-                {config.description && (
-                    <p className={`${embedded ? "text-base" : "text-lg"} text-neutral-600 dark:text-neutral-500 max-w-2xl`}>
-                        {config.description}
-                    </p>
-                )}
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                    {config.description && (
+                        <p className={`${embedded ? "text-base" : "text-lg"} text-neutral-600 dark:text-neutral-500 max-w-2xl`}>
+                            {config.description}
+                        </p>
+                    )}
+                    
+                    {/* --- 功能 2：显示筛选后的论文总数 --- */}
+                    <div className="text-sm font-medium text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-800 px-3 py-1 rounded-full whitespace-nowrap">
+                        {filteredPublications.length} publications
+                        {selectedTag !== 'all' || selectedYear !== 'all' || selectedType !== 'all' || searchQuery ? ' matched' : ''}
+                    </div>
+                </div>
             </div>
 
             {/* Search and Filter Controls */}
             <div className="mb-8 space-y-4">
-                {/* ... (keep existing controls) ... */}
+                {/* ... (搜索框代码保持不变) ... */}
                 <div className="flex flex-col sm:flex-row gap-4">
                     <div className="relative flex-grow">
                         <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-neutral-400" />
                         <input
                             type="text"
-                            placeholder={messages.publications.searchPlaceholder}
+                            placeholder={messages.publications.searchPlaceholder || "Search publications..."}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-full pl-10 pr-4 py-2 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-200"
@@ -97,7 +129,7 @@ export default function PublicationsList({ config, publications, embedded = fals
                         )}
                     >
                         <FunnelIcon className="h-5 w-5 mr-2" />
-                        {messages.publications.filters}
+                        {messages.publications.filters || "Filters"}
                     </button>
                 </div>
 
@@ -109,85 +141,86 @@ export default function PublicationsList({ config, publications, embedded = fals
                             exit={{ opacity: 0, height: 0 }}
                             className="overflow-hidden"
                         >
-                            <div className="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg border border-neutral-200 dark:border-neutral-800 flex flex-wrap gap-6">
-                                {/* Year Filter */}
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center">
-                                        <CalendarIcon className="h-4 w-4 mr-1" /> {messages.publications.year}
-                                    </label>
-                                    <div className="flex flex-wrap gap-2">
-                                        <button
-                                            onClick={() => setSelectedYear('all')}
-                                            className={cn(
-                                                "px-3 py-1 text-xs rounded-full transition-colors",
-                                                selectedYear === 'all'
-                                                    ? "bg-accent text-white"
-                                                    : "bg-white dark:bg-neutral-800 text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700"
-                                            )}
-                                        >
-                                            {messages.common.all}
-                                        </button>
-                                        {years.map(year => (
-                                            <button
-                                                key={year}
-                                                onClick={() => setSelectedYear(year)}
-                                                className={cn(
-                                                    "px-3 py-1 text-xs rounded-full transition-colors",
-                                                    selectedYear === year
-                                                        ? "bg-accent text-white"
-                                                        : "bg-white dark:bg-neutral-800 text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700"
-                                                )}
-                                            >
-                                                {year}
-                                            </button>
-                                        ))}
+                            <div className="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg border border-neutral-200 dark:border-neutral-800 flex flex-col gap-6">
+                                
+                                {/* Year & Type Filter Row */}
+                                <div className="flex flex-wrap gap-8">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center">
+                                            <CalendarIcon className="h-4 w-4 mr-1" /> Year
+                                        </label>
+                                        <div className="flex flex-wrap gap-2">
+                                            <button onClick={() => setSelectedYear('all')} className={cn("px-3 py-1 text-xs rounded-full", selectedYear === 'all' ? "bg-accent text-white" : "bg-white dark:bg-neutral-800")}>All</button>
+                                            {years.map(year => (
+                                                <button key={year} onClick={() => setSelectedYear(year)} className={cn("px-3 py-1 text-xs rounded-full", selectedYear === year ? "bg-accent text-white" : "bg-white dark:bg-neutral-800")}>{year}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center">
+                                            <BookOpenIcon className="h-4 w-4 mr-1" /> Type
+                                        </label>
+                                        <div className="flex flex-wrap gap-2">
+                                            <button onClick={() => setSelectedType('all')} className={cn("px-3 py-1 text-xs rounded-full", selectedType === 'all' ? "bg-accent text-white" : "bg-white dark:bg-neutral-800")}>All</button>
+                                            {types.map(type => (
+                                                <button key={type} onClick={() => setSelectedType(type)} className={cn("px-3 py-1 text-xs rounded-full capitalize", selectedType === type ? "bg-accent text-white" : "bg-white dark:bg-neutral-800")}>{type.replace('-', ' ')}</button>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
 
-                                {/* Type Filter */}
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center">
-                                        <BookOpenIcon className="h-4 w-4 mr-1" /> {messages.publications.type}
-                                    </label>
-                                    <div className="flex flex-wrap gap-2">
-                                        <button
-                                            onClick={() => setSelectedType('all')}
-                                            className={cn(
-                                                "px-3 py-1 text-xs rounded-full transition-colors",
-                                                selectedType === 'all'
-                                                    ? "bg-accent text-white"
-                                                    : "bg-white dark:bg-neutral-800 text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700"
-                                            )}
-                                        >
-                                            {messages.common.all}
-                                        </button>
-                                        {types.map(type => (
+                                {/* Tag Filter with Counts */}
+                                {allTagsWithCount.length > 0 && (
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center">
+                                            <TagIcon className="h-4 w-4 mr-1" /> Tags
+                                        </label>
+                                        <div className="flex flex-wrap gap-2">
                                             <button
-                                                key={type}
-                                                onClick={() => setSelectedType(type)}
+                                                onClick={() => setSelectedTag('all')}
                                                 className={cn(
-                                                    "px-3 py-1 text-xs rounded-full capitalize transition-colors",
-                                                    selectedType === type
-                                                        ? "bg-accent text-white"
-                                                        : "bg-white dark:bg-neutral-800 text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                                                    "px-3 py-1 text-xs rounded-full transition-colors",
+                                                    selectedTag === 'all' ? "bg-accent text-white" : "bg-white dark:bg-neutral-800 text-neutral-600"
                                                 )}
                                             >
-                                                {type.replace('-', ' ')}
+                                                All
                                             </button>
-                                        ))}
+                                            {allTagsWithCount.map(tag => (
+                                                <button
+                                                    key={tag.name}
+                                                    onClick={() => setSelectedTag(tag.name)}
+                                                    className={cn(
+                                                        "px-3 py-1 text-xs rounded-full transition-colors flex items-center gap-1.5",
+                                                        selectedTag === tag.name 
+                                                            ? "bg-accent text-white" 
+                                                            : "bg-white dark:bg-neutral-800 text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                                                    )}
+                                                >
+                                                    <span>{tag.name}</span>
+                                                    <span className={cn(
+                                                        "px-1.5 py-0.5 rounded-full text-[10px]",
+                                                        selectedTag === tag.name ? "bg-white/20 text-white" : "bg-neutral-100 dark:bg-neutral-700 text-neutral-400"
+                                                    )}>
+                                                        {tag.count}
+                                                    </span>
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
+                                )}
                             </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
             </div>
 
+
             {/* Publications Grid */}
             <div className="space-y-6">
                 {filteredPublications.length === 0 ? (
                     <div className="text-center py-12 text-neutral-500">
-                        {messages.publications.noResults}
+                        {messages.publications.noResults || "No publications found."}
                     </div>
                 ) : (
                     filteredPublications.map((pub, index) => (
@@ -196,9 +229,9 @@ export default function PublicationsList({ config, publications, embedded = fals
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4, delay: 0.1 * index }}
-                            className="bg-white dark:bg-neutral-900 p-6 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-800 hover:shadow-md transition-all duration-200"
+                            className="bg-white dark:bg-neutral-900 p-6 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-800 hover:shadow-md transition-all duration-200 flex flex-col"
                         >
-                            <div className="flex flex-col md:flex-row gap-6">
+                            <div className="flex flex-col md:flex-row gap-6 flex-grow">
                                 {pub.preview && (
                                     <div className="w-full md:w-48 flex-shrink-0">
                                         <div className="aspect-video md:aspect-[4/3] relative rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-800">
@@ -212,7 +245,7 @@ export default function PublicationsList({ config, publications, embedded = fals
                                         </div>
                                     </div>
                                 )}
-                                <div className="flex-grow">
+                                <div className="flex-grow flex flex-col">
                                     <h3 className={`${embedded ? "text-lg" : "text-xl"} font-semibold text-primary mb-2 leading-tight`}>
                                         {pub.title}
                                     </h3>
@@ -239,93 +272,60 @@ export default function PublicationsList({ config, publications, embedded = fals
                                         </p>
                                     )}
 
-                                    <div className="flex flex-wrap gap-2 mt-auto">
-                                        {pub.doi && (
-                                            <a
-                                                href={`https://doi.org/${pub.doi}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-accent hover:text-white transition-colors"
-                                            >
-                                                DOI
-                                            </a>
-                                        )}
-                                        {pub.code && (
-                                            <a
-                                                href={pub.code}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-accent hover:text-white transition-colors"
-                                            >
-                                                {messages.publications.code}
-                                            </a>
-                                        )}
-                                        {pub.abstract && (
-                                            <button
-                                                onClick={() => setExpandedAbstractId(expandedAbstractId === pub.id ? null : pub.id)}
-                                                className={cn(
-                                                    "inline-flex items-center px-3 py-1 rounded-md text-xs font-medium transition-colors",
-                                                    expandedAbstractId === pub.id
-                                                        ? "bg-accent text-white"
-                                                        : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-accent hover:text-white"
-                                                )}
-                                            >
-                                                <DocumentTextIcon className="h-3 w-3 mr-1.5" />
-                                                {messages.publications.abstract}
-                                            </button>
-                                        )}
-                                        {pub.bibtex && (
-                                            <button
-                                                onClick={() => setExpandedBibtexId(expandedBibtexId === pub.id ? null : pub.id)}
-                                                className={cn(
-                                                    "inline-flex items-center px-3 py-1 rounded-md text-xs font-medium transition-colors",
-                                                    expandedBibtexId === pub.id
-                                                        ? "bg-accent text-white"
-                                                        : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-accent hover:text-white"
-                                                )}
-                                            >
-                                                <BookOpenIcon className="h-3 w-3 mr-1.5" />
-                                                {messages.publications.bibtex}
-                                            </button>
+                                    {/* 6. 将操作按钮和 Tags 结合在一排显示，Tags 靠右对齐 */}
+                                    <div className="flex flex-wrap items-center justify-between gap-4 mt-auto pt-2">
+                                        <div className="flex flex-wrap gap-2">
+                                            {pub.doi && (
+                                                <a href={`https://doi.org/${pub.doi}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-accent hover:text-white transition-colors">
+                                                    DOI
+                                                </a>
+                                            )}
+                                            {pub.code && (
+                                                <a href={pub.code} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-accent hover:text-white transition-colors">
+                                                    {messages.publications.code || "Code"}
+                                                </a>
+                                            )}
+                                            {pub.abstract && (
+                                                <button onClick={() => setExpandedAbstractId(expandedAbstractId === pub.id ? null : pub.id)} className={cn("inline-flex items-center px-3 py-1 rounded-md text-xs font-medium transition-colors", expandedAbstractId === pub.id ? "bg-accent text-white" : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-accent hover:text-white")}>
+                                                    <DocumentTextIcon className="h-3 w-3 mr-1.5" />
+                                                    {messages.publications.abstract || "Abstract"}
+                                                </button>
+                                            )}
+                                            {pub.bibtex && (
+                                                <button onClick={() => setExpandedBibtexId(expandedBibtexId === pub.id ? null : pub.id)} className={cn("inline-flex items-center px-3 py-1 rounded-md text-xs font-medium transition-colors", expandedBibtexId === pub.id ? "bg-accent text-white" : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-accent hover:text-white")}>
+                                                    <BookOpenIcon className="h-3 w-3 mr-1.5" />
+                                                    {messages.publications.bibtex || "BibTeX"}
+                                                </button>
+                                            )}
+                                        </div>
+                                        
+                                        {/* Tags 渲染区域（卡片右下角） */}
+                                        {parseTags(pub.tags as string[]).length > 0 && (
+                                            <div className="flex flex-wrap gap-1.5 justify-end">
+                                                {parseTags(pub.tags as string[]).map(tag => (
+                                                    <span 
+                                                        key={tag} 
+                                                        className="px-2 py-0.5 text-[10px] sm:text-xs font-semibold rounded-sm border border-accent/20 text-accent bg-accent/5"
+                                                    >
+                                                        {tag}
+                                                    </span>
+                                                ))}
+                                            </div>
                                         )}
                                     </div>
-
                                     <AnimatePresence>
                                         {expandedAbstractId === pub.id && pub.abstract ? (
-                                            <motion.div
-                                                key="abstract"
-                                                initial={{ opacity: 0, height: 0 }}
-                                                animate={{ opacity: 1, height: 'auto' }}
-                                                exit={{ opacity: 0, height: 0 }}
-                                                className="overflow-hidden mt-4"
-                                            >
+                                            <motion.div key="abstract" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden mt-4">
                                                 <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4 border border-neutral-200 dark:border-neutral-700">
-                                                    <p className="text-sm text-neutral-600 dark:text-neutral-500 leading-relaxed">
-                                                        {pub.abstract}
-                                                    </p>
+                                                    <p className="text-sm text-neutral-600 dark:text-neutral-500 leading-relaxed">{pub.abstract}</p>
                                                 </div>
                                             </motion.div>
                                         ) : null}
                                         {expandedBibtexId === pub.id && pub.bibtex ? (
-                                            <motion.div
-                                                key="bibtex"
-                                                initial={{ opacity: 0, height: 0 }}
-                                                animate={{ opacity: 1, height: 'auto' }}
-                                                exit={{ opacity: 0, height: 0 }}
-                                                className="overflow-hidden mt-4"
-                                            >
+                                            <motion.div key="bibtex" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden mt-4">
                                                 <div className="relative bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4 border border-neutral-200 dark:border-neutral-700">
-                                                    <pre className="text-xs text-neutral-600 dark:text-neutral-500 overflow-x-auto whitespace-pre-wrap font-mono">
-                                                        {pub.bibtex}
-                                                    </pre>
-                                                    <button
-                                                        onClick={() => {
-                                                            navigator.clipboard.writeText(pub.bibtex || '');
-                                                            // Optional: Show copied feedback
-                                                        }}
-                                                        className="absolute top-2 right-2 p-1.5 rounded-md bg-white dark:bg-neutral-700 text-neutral-500 hover:text-accent shadow-sm border border-neutral-200 dark:border-neutral-600 transition-colors"
-                                                        title={messages.common.copyToClipboard}
-                                                    >
+                                                    <pre className="text-xs text-neutral-600 dark:text-neutral-500 overflow-x-auto whitespace-pre-wrap font-mono">{pub.bibtex}</pre>
+                                                    <button onClick={() => navigator.clipboard.writeText(pub.bibtex || '')} className="absolute top-2 right-2 p-1.5 rounded-md bg-white dark:bg-neutral-700 text-neutral-500 hover:text-accent shadow-sm border border-neutral-200 dark:border-neutral-600 transition-colors" title={messages.common?.copyToClipboard || "Copy"}>
                                                         <ClipboardDocumentIcon className="h-4 w-4" />
                                                     </button>
                                                 </div>

@@ -62,6 +62,14 @@ export function parseBibTeX(bibtexContent: string, locale?: string): Publication
     // Parse preview field (remove braces if present)
     const preview = tags.preview?.replace(/[{}]/g, '');
 
+    // 1. 尝试从 tags 字段或 keywords 字段获取原始字符串
+    const rawTags = tags.tags || tags.keywords || '';
+
+    // 2. 兼容多种分隔符（逗号、分号），并清理空格
+    const combinedTags = rawTags
+        ? rawTags.split(/[;,]/).map((t: string) => t.trim()).filter(Boolean)
+        : [];
+
     // Create publication object
     const publication: Publication = {
       id: entry.citationKey || tags.id || `pub-${Date.now()}-${index}`,
@@ -71,8 +79,8 @@ export function parseBibTeX(bibtexContent: string, locale?: string): Publication
       month: monthMapping[tags.month?.toLowerCase()] ? String(month) : tags.month,
       type,
       status: 'published',
-      tags: keywords,
-      keywords,
+      tags: combinedTags,     // 现在这里会优先读取 .bib 中的 tags 字段了
+      keywords: combinedTags, // 同时填充 keywords 以保持兼容性
       researchArea: detectResearchArea(tags.title, keywords),
 
       // Optional fields
